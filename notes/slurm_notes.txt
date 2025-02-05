@@ -1,0 +1,44 @@
+# First ssh into slurm-master in AIfA
+ssh -X username@slurm-master
+
+# Make the slurm script executable, give permissions
+chmod +x slurm_test.sh
+
+# To run the slurm file on terminal
+# 1) Check all #SBATCH Directives in slurm_test file
+# 2) Is Mail-user for updates correct?
+# 3) Is Conda Initialised Correctly?
+# 4) Is correct Conda env in use?
+# 5) Choose the main Python script to run, with/without MPI
+# 6) Save changes to slurm file
+
+# Run:
+sbatch slurm_test.sh
+
+# If no errors, should get an email
+# Job monitors, on slurm-master:
+sinfo
+squeue
+
+# Check Job Status:
+squeue -j <Job_ID>
+
+# Logs:
+tail -f slurm.<Node_ID>.<Job_ID>.out
+tail -f slurm.<Node_ID>.<Job_ID>.err
+
+
+# Resource Usage:
+sstat -j <Job_ID>
+
+# Cancel Job:
+scancel <Job_ID>
+
+# Job info:
+scontrol show job <Job_ID>
+
+# sinfo for info on HPC Cluster
+ sinfo -s
+
+
+

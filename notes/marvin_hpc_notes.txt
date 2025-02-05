@@ -1,0 +1,189 @@
+# HPC Cluster Overview
+# ====================
+#Marvin
+#https://www.hpc.uni-bonn.de/en/systems/marvin
+
+# Node Types and Partitions:
+# --------------------------
+# 1. IntelSR Nodes (192 Nodes)
+#    - Partitions: intelsr_devel, intelsr_short, intelsr_medium, intelsr_long
+#    - Cores: 18,432 (96 cores per node)
+#    - Memory: 196.6 TB total (1,024 GB per node)
+#    - Timelimits: 1 hour to 7 days
+
+# 2. MLGPU Nodes (24 Nodes)
+#    - Partitions: mlgpu_devel, mlgpu_short, mlgpu_medium, mlgpu_long
+#    - Cores: 3,072 (128 cores per node)
+#    - Memory: 12.3 TB total (512 GB per node)
+#    - GPUs: Nvidia A40 (8 per node)
+#    - Timelimits: 1 hour to 7 days
+
+# 3. SGPU Nodes (32 Nodes)
+#    - Partitions: sgpu_devel, sgpu_short, sgpu_medium, sgpu_long
+#    - Cores: 4,096 (128 cores per node)
+#    - Memory: 32.8 TB total (1,024 GB per node)
+#    - GPUs: Nvidia A100 (4 per node)
+#    - Timelimits: 1 hour to 7 days
+
+# 4. Large Memory Nodes (24 Nodes)
+#    - Partitions: lm_devel, lm_short, lm_medium, lm_long
+#    - Cores: 2,304 (96 cores per node)
+#    - Memory: 49.2 TB total (2,048 GB per node)
+#    - Timelimits: 1 hour to 7 days
+
+# 5. Very Large Memory Nodes (5 Nodes)
+#    - Partitions: vlm_devel, vlm_short, vlm_medium, vlm_long
+#    - Cores: 480 (96 cores per node)
+#    - Memory: 20.5 TB total (4,096 GB per node)
+#    - Timelimits: 1 hour to 7 days
+
+# Storage:
+# --------
+# - Lustre file system with 5.6 PB for user data.
+
+# Network:
+# --------
+# - Mellanox InfiniBand NDR 200 GB/s.
+
+# Summary:
+# --------
+# - Total Nodes: 277
+# - Total Cores: 28,384
+# - Total Memory: 311.4 TB
+# - Partitions are categorized by node type and available runtime (1 hour to 7 days).
+###
+###
+###
+#
+#
+#
+#-------------------------------------------------------------------
+#
+#
+#
+# Understanding sinfo -s Output
+# =============================
+
+# Column Breakdown:
+# -----------------
+# PARTITION: Name of the partition (group of nodes).
+# AVAIL: Availability status of the partition ('up' means available for jobs).
+# TIMELIMIT: Maximum time limit for jobs in this partition.
+# NODES(A/I/O/T):
+#   - A: Allocated nodes (currently running jobs, all in use).
+#   - I: Idle nodes (available but not currently running jobs).
+#   - O: Other nodes (unavailable, possibly due to maintenance or failure).
+#   - T: Total nodes in the partition.
+# NODELIST: List or range of nodes within the partition.
+#   - Mix: Mix of Avail and Idle
+
+# Partition Details:
+# ------------------
+# 1. intelsr_* Partitions (node[001-192])
+#    - Total Nodes: 192
+#    - Jobs run on IntelSR nodes with varying time limits from 1 hour to 7 days.
+
+# 2. mlgpu_* Partitions (mlgpu[001-024])
+#    - Total Nodes: 24
+#    - Jobs run on Machine Learning GPU nodes with Nvidia A40 GPUs.
+#    - Time limits vary from 1 hour to 7 days.
+
+# 3. sgpu_* Partitions (sgpu[001-032])
+#    - Total Nodes: 32
+#    - Jobs run on Scalable GPU nodes with Nvidia A100 GPUs.
+#    - Time limits vary from 1 hour to 7 days.
+
+# 4. lm_* Partitions (lmnode[193-216])
+#    - Total Nodes: 24
+#    - Jobs run on Large Memory nodes.
+#    - Time limits vary from 1 hour to 7 days.
+
+# 5. vlm_* Partitions (vlmnode[217-221])
+#    - Total Nodes: 5
+#    - Jobs run on Very Large Memory nodes.
+#    - Time limits vary from 1 hour to 7 days.
+
+# Summary:
+# --------
+# - Each partition corresponds to a specific type of node (e.g., IntelSR, MLGPU).
+# - The time limits specify how long jobs can run on these partitions.
+# - The node status (A/I/O/T) helps to understand node utilization in each partition.
+#
+#
+#======================================================================================##
+
+
+# #Bender Notes:
+# ~sinfo -s
+# PARTITION  AVAIL  TIMELIMIT   NODES(A/I/O/T) NODELIST
+# A40devel*     up    1:00:00          0/1/0/1 node-04
+# A40short      up    8:00:00          3/0/0/3 node-[01-03]
+# A40medium     up 1-00:00:00          3/0/0/3 node-[01-03]
+# A100devel     up    1:00:00          1/0/1/2 node-[05-06]
+# A100short     up    8:00:00          1/0/1/2 node-[05-06]
+# A100medium    up 1-00:00:00          1/0/1/2 node-[05-06]
+
+# There are 6 compute nodes, but these are different queues. We can choose which queue to join
+# We join a queue (partition) and nodes are allocated as per requested by script directive.
+
+# $ sinfo
+# PARTITION  AVAIL  TIMELIMIT  NODES  STATE NODELIST
+# A40devel*     up    1:00:00      1   idle node-04
+# A40short      up    8:00:00      2    mix node-[01-02]
+# A40short      up    8:00:00      1  alloc node-03
+# A40medium     up 1-00:00:00      2    mix node-[01-02]
+# A40medium     up 1-00:00:00      1  alloc node-03
+# A100devel     up    1:00:00      1  drain node-06
+# A100devel     up    1:00:00      1    mix node-05
+# A100short     up    8:00:00      1  drain node-06
+# A100short     up    8:00:00      1    mix node-05
+# A100medium    up 1-00:00:00      1  drain node-06
+# A100medium    up 1-00:00:00      1    mix node-05
+
+# All 6 nodes are available (means active)
+# node-04 is idle and available for jobs. 
+# node-03 is allocated fully and running jobs
+# nodes-01-02 are mixed, partially allocated
+# 
+# mix = mixture of allocated and idle cores
+# idle = all cores in node idle
+# alloc = all cores allocated and running active jobs
+# drain = offline for maintenance etc, not accepting jobs
+#
+#
+#
+#
+#======================================================================================##
+#
+# Slurm Commands:
+# sbatch [OPTIONS] script.slurm
+# squeue, squeue --me
+# squeue --start -j <jobid>
+# sinfo , sinfo -s
+# scontrol show job JOB_ID
+# sacct -j JOB_ID --format=JobID,JobName,Partition,AllocCPUS,State,Elapsed,MaxRSS,MaxVMSize,TotalCPU,CPUTime,ReqMem,AveRSS,AveVMSize
+# seff JOB_ID
+# sshare
+# module avail, show, help, load, unload, purge, overview
+#
+#
+#======================================================================================##
+# Workspaces:
+# https://wiki.hpc.uni-bonn.de/en/marvin/workspaces
+# in .ws_user.conf:
+# mail: 
+# reminder: 
+# 
+# ws_allocate <ws_name> <dur_in_days> #Max 90 days, x3 extensions
+# Example:
+# ws_allocate ccat_ws 90
+# ws_extend ccat_ws 90
+#
+# ws_list #to list workspaces
+#======================================================================================##
+#
+#
+#
+#
+#
+#
