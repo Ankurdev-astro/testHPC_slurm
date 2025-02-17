@@ -20,7 +20,7 @@ def main():
     plt.title(f"Test with MPI: Process {rank}")
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.savefig(f"plot_rank_{rank}.png")
+    plt.savefig(f"./plots/plot_rank_{rank}.png")
 
     print(f"Comm: {comm}, Rank: {rank}")
 if __name__ == "__main__":

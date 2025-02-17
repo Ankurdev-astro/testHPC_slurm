@@ -1,0 +1,48 @@
+# HPC Cluster Overview
+# ====================
+# Ramses
+# https://gitlab.git.nrw/uzk-itcc-hpc/itcc-hpc-ramses/-/wikis/Documentation
+#
+# --------------------------------------------------------------------
+# sinfo -s:
+# PARTITION   AVAIL  TIMELIMIT   NODES(A/I/O/T) NODELIST
+# smp*           up 30-00:00:0      65/61/2/128 ramses[11001-11020,11029-11040,12001-12020,12029-12040,13001-13020,13029-13040,14001-14020,14029-14040]
+# mpi            up 15-00:00:0      65/61/2/128 ramses[11001-11020,11029-11040,12001-12020,12029-12040,13001-13020,13029-13040,14001-14020,14029-14040]
+# bigsmp         up 30-00:00:0          4/3/1/8 ramses[11143-11144,12143-12144,13143-13144,14143-14144]
+# gpu            up 15-00:00:0         1/9/0/10 ramses[16301,16304,16307,16310,16313,16316,16324,16327,16330,16333]
+# interactive    up 15-00:00:0          2/5/1/8 ramses[15229,15231,15233,15235,15237,15239,15241,15243]
+# smp-secure     up 30-00:00:0          0/8/0/8 ramses[11041-11042,12041-12042,13041-13042,14041-14042]
+# 
+# --------------------------------------------------------------------
+# smp: only accepts single node jobs
+# mpi: only for multi node jobs
+# bigsmp: only single node jobs with 3TB mem; multi-node fails
+#
+# --------------------------------------------------------------------
+# To enter compute node [only on those node where Job is active]:
+# ssh ramsesXXXXX
+# or
+# srun --nodelist=<node_name> --pty /bin/bash -l
+# 
+# --------------------------------------------------------------------
+# working dir is /scratch/ccat_project/
+# 
+# --------------------------------------------------------------------
+# Misc Notes:
+#
+# #SBATCH --account=<youraccount>
+# #SBATCH --mail-user=username@uni-koeln.de
+# --------------------------------------------------------------------
+# Modules:
+#
+# modules lang/Miniconda3/23.9.0-0 and lib/mpi4py/3.1.5-gompi-2023b are compatible.
+# module load lang/Miniconda3/23.9.0-0
+# module load lib/mpi4py/3.1.5-gompi-2023b
+#
+#----------------------------------------------------------------------
+#Found this issue as reported in:
+#https://github.com/easybuilders/easybuild-easyconfigs/issues/20233
+#Seems to be fixed with: [17.02.2024]
+#export OMPI_MCA_btl='^uct,ofi'
+#export OMPI_MCA_pml='ucx'
+#export OMPI_MCA_mtl='^ofi'

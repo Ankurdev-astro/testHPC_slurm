@@ -12,7 +12,7 @@ def main():
     plt.title("SLURM test Plot")
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.savefig("test_noMPI_plot.png")
+    plt.savefig("./plots/test_noMPI_plot.png")
 
 if __name__ == "__main__":
     main()

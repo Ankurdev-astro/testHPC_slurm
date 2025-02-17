@@ -22,6 +22,7 @@ squeue
 
 # Check Job Status:
 squeue -j <Job_ID>
+squeue --me
 
 # Logs:
 tail -f slurm.<Node_ID>.<Job_ID>.out
@@ -30,6 +31,7 @@ tail -f slurm.<Node_ID>.<Job_ID>.err
 
 # Resource Usage:
 sstat -j <Job_ID>
+seff <Job_ID>
 
 # Cancel Job:
 scancel <Job_ID>
