@@ -10,7 +10,7 @@
 #SBATCH --ntasks-per-node 4 # max tasks per node
 #SBATCH --cpus-per-task 2 # number of cores per task
 
-#SBATCH --nodes 2  # number of nodes
+#SBATCH --nodes 1  # number of nodes
 
 ### #ntasks = #nodes x #tasks-per-node
 ### #ncores_total = #ntasks x #cpus-per-task
@@ -59,7 +59,10 @@ echo "Cores per Node: $SLURM_CPUS_ON_NODE"
 echo "Total Number of Nodes: $SLURM_JOB_NUM_NODES"
 echo "Current working directory is `pwd`"
 echo "Python path: $(which python)"
+echo "Python version: $(python --version)"
+echo "Using mpi4py: $(python -c 'import mpi4py; print(mpi4py.__file__)' 2>/dev/null || echo '!! mpi4py not found !!')"
 echo "Using MPI lib: $(which mpirun)"
+echo "Using mpicc lib: $(which mpicc)"
 echo "Using GCC lib: $(which gcc)"
 echo ""
 
@@ -69,9 +72,9 @@ echo `date '+%F %H:%M:%S'`
 echo "***********************"
 echo ""
 
-export OMPI_MCA_btl='^uct,ofi'
-export OMPI_MCA_pml='ucx'
-export OMPI_MCA_mtl='^ofi'
+###export OMPI_MCA_btl='^uct,ofi'
+###export OMPI_MCA_pml='ucx'
+###export OMPI_MCA_mtl='^ofi'
 
 mkdir -p plots
 ###python3 src/matplotlib_test.py
