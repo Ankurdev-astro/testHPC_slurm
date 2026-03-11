@@ -180,6 +180,7 @@
 # ws_extend ccat_ws 90
 #
 # ws_list #to list workspaces
+# ws_release <ws_name> #to delete workspace
 #======================================================================================##
 #
 #
