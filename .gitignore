@@ -5,3 +5,5 @@ logs/*
 *.png
 
 plots/*
+.ipynb_checkpoints/*
+src/.ipynb_checkpoints/*
